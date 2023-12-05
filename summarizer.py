@@ -5,17 +5,16 @@ import numpy as np
 import networkx as nx
 
 def read_article(file_name):
-    file = open(file_name, "r")
-    filedata = file.readlines()
-    article = filedata[0].split(". ")
-    sentences = []
+    with open(file_name, "r") as file:
+        filedata = file.read()
 
-    for sentence in article:
-        print(sentence)
-        sentences.append(sentence.replace("[^a-zA-Z]", " ").split(" "))
-    sentences.pop() 
-    
-    return sentences
+    sentences = filedata.replace("[^a-zA-Z]", " ").split(". ")
+    if sentences[-1] == '':
+        sentences.pop()
+
+    processed_sentences = [sentence.split() for sentence in sentences]
+    return processed_sentences
+
 
 def sentenceSimilarity(vector1, vector2):
   return 1 - cosine_distance(vector1, vector2)
