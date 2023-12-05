@@ -16,10 +16,7 @@ def read_article(file_name):
     return processed_sentences
 
 
-def sentenceSimilarity(vector1, vector2):
-  return 1 - cosine_distance(vector1, vector2)
-
-def sentence_similarity(sent1, sent2, stopwords=[]):
+def sentenceSimilarity(sent1, sent2, stopwords=[]):
     sent1 = [w.lower() for w in sent1 if w.lower() not in stopwords]
     sent2 = [w.lower() for w in sent2 if w.lower() not in stopwords]
 
@@ -27,15 +24,14 @@ def sentence_similarity(sent1, sent2, stopwords=[]):
     vector1 = [sent1.count(word) for word in all_words]
     vector2 = [sent2.count(word) for word in all_words]
 
-    return vector1, vector2
+    return 1 - cosine_distance(vector1, vector2)
 
 def build_similarity_matrix(sentences, stop_words):
     similarity_matrix = np.zeros((len(sentences), len(sentences)))
     for idx1, sentence1 in enumerate(sentences):
         for idx2, sentence2 in enumerate(sentences):
             if idx1 != idx2:
-                vector1, vector2 = sentence_similarity(sentence1, sentence2, stop_words)
-                similarity_matrix[idx1][idx2] = sentenceSimilarity(vector1, vector2)
+                similarity_matrix[idx1][idx2] = sentenceSimilarity(sentence1, sentence2, stop_words)
     return similarity_matrix
 
 def generate_summary(file_name, top_n=5):
